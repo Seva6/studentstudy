@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}
+
+/* Focus styles */
+*:focus-visible {
+  @apply outline-2 outline-offset-2 outline-primary-500;
+}
+
+/* Status colors */
+.status-not-started {
+  @apply bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300;
+}
+
+.status-in-progress {
+  @apply bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400;
+}
+
+.status-completed {
+  @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400;
+}
+
+.status-overdue {
+  @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400;
+}
+
+/* Urgency colors */
+.urgency-low {
+  @apply border-l-4 border-l-blue-400;
+}
+
+.urgency-medium {
+  @apply border-l-4 border-l-yellow-400;
+}
+
+.urgency-high {
+  @apply border-l-4 border-l-orange-400;
+}
+
+.urgency-urgent {
+  @apply border-l-4 border-l-red-500 animate-pulse-slow;
+}
+
+/* Animation for overdue items */
+@keyframes pulse-border {
+  0%, 100% {
+    border-color: rgb(239 68 68);
+  }
+  50% {
+    border-color: rgb(239 68 68 / 0.5);
+  }
+}
+
+.overdue-pulse {
+  animation: pulse-border 2s ease-in-out infinite;
+}
+
+/* Glass effect for cards */
+.glass {
+  @apply bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm;
+}
+
+/* Transition utilities */
+.transition-theme {
+  @apply transition-colors duration-200;
+}
