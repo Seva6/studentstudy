@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
-import { doc, updateDoc } from 'firebase/firestore'
-import { db } from '../../services/firebase'
+import { updateAssignment } from '../../services/localStorage'
 import { formatDueDate, isOverdue, getUrgency } from '../../utils/dateUtils'
 import Badge from '../common/Badge'
 import toast from 'react-hot-toast'
@@ -11,18 +10,19 @@ const statusConfig = {
   'completed': { label: 'Completed', variant: 'success' }
 }
 
-const AssignmentCard = ({ assignment, compact = false }) => {
+const AssignmentCard = ({ assignment, compact = false, onStatusChange }) => {
   const { id, title, className, subject, dueDate, status, type } = assignment
   const overdue = isOverdue(dueDate) && status !== 'completed'
   const urgency = getUrgency(dueDate)
 
-  const handleStatusChange = async (newStatus) => {
+  const handleStatusChange = (newStatus) => {
     try {
-      await updateDoc(doc(db, 'assignments', id), {
-        status: newStatus,
-        updatedAt: new Date().toISOString()
-      })
+      updateAssignment(id, { status: newStatus })
       toast.success(`Status updated to ${statusConfig[newStatus].label}`)
+      // Notify parent component if callback is provided
+      if (onStatusChange) {
+        onStatusChange(id, newStatus)
+      }
     } catch (error) {
       console.error('Error updating status:', error)
       toast.error('Failed to update status')
