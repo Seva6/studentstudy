@@ -42,6 +42,15 @@ const Dashboard = () => {
     setLoading(false)
   }, [user, isTeacher])
 
+  // Handle status change from AssignmentCard
+  const handleStatusChange = (assignmentId, newStatus) => {
+    setAssignments(prev => 
+      prev.map(a => 
+        a.id === assignmentId ? { ...a, status: newStatus } : a
+      )
+    )
+  }
+
   // Calculate stats
   const activeAssignments = assignments.filter(a => a.status !== 'completed')
   const overdueAssignments = assignments.filter(a => 
@@ -152,7 +161,7 @@ const Dashboard = () => {
           </div>
           <div className="p-4 space-y-3">
             {overdueAssignments.slice(0, 3).map(assignment => (
-              <AssignmentCard key={assignment.id} assignment={assignment} compact />
+              <AssignmentCard key={assignment.id} assignment={assignment} compact onStatusChange={handleStatusChange} />
             ))}
           </div>
         </Card>
@@ -172,7 +181,7 @@ const Dashboard = () => {
           {dueSoonAssignments.length > 0 ? (
             <div className="space-y-3">
               {dueSoonAssignments.slice(0, 5).map(assignment => (
-                <AssignmentCard key={assignment.id} assignment={assignment} />
+                <AssignmentCard key={assignment.id} assignment={assignment} onStatusChange={handleStatusChange} />
               ))}
             </div>
           ) : (

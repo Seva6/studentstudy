@@ -28,6 +28,15 @@ const Assignments = () => {
     setLoading(false)
   }, [user])
 
+  // Handle status change from AssignmentCard
+  const handleStatusChange = (assignmentId, newStatus) => {
+    setAssignments(prev => 
+      prev.map(a => 
+        a.id === assignmentId ? { ...a, status: newStatus } : a
+      )
+    )
+  }
+
   const groupedAssignments = groupAssignmentsByDate(assignments)
 
   if (loading) {
@@ -88,7 +97,7 @@ const Assignments = () => {
               </h2>
               <div className="space-y-3">
                 {groupedAssignments.overdue.map(assignment => (
-                  <AssignmentCard key={assignment.id} assignment={assignment} />
+                  <AssignmentCard key={assignment.id} assignment={assignment} onStatusChange={handleStatusChange} />
                 ))}
               </div>
             </section>
@@ -102,7 +111,7 @@ const Assignments = () => {
               </h2>
               <div className="space-y-3">
                 {groupedAssignments.today.map(assignment => (
-                  <AssignmentCard key={assignment.id} assignment={assignment} />
+                  <AssignmentCard key={assignment.id} assignment={assignment} onStatusChange={handleStatusChange} />
                 ))}
               </div>
             </section>
@@ -116,7 +125,7 @@ const Assignments = () => {
               </h2>
               <div className="space-y-3">
                 {groupedAssignments.tomorrow.map(assignment => (
-                  <AssignmentCard key={assignment.id} assignment={assignment} />
+                  <AssignmentCard key={assignment.id} assignment={assignment} onStatusChange={handleStatusChange} />
                 ))}
               </div>
             </section>
@@ -130,7 +139,7 @@ const Assignments = () => {
               </h2>
               <div className="space-y-3">
                 {groupedAssignments.thisWeek.map(assignment => (
-                  <AssignmentCard key={assignment.id} assignment={assignment} />
+                  <AssignmentCard key={assignment.id} assignment={assignment} onStatusChange={handleStatusChange} />
                 ))}
               </div>
             </section>
@@ -144,7 +153,7 @@ const Assignments = () => {
               </h2>
               <div className="space-y-3">
                 {groupedAssignments.later.map(assignment => (
-                  <AssignmentCard key={assignment.id} assignment={assignment} />
+                  <AssignmentCard key={assignment.id} assignment={assignment} onStatusChange={handleStatusChange} />
                 ))}
               </div>
             </section>

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { updateAssignment } from '../../services/localStorage'
 import { formatDueDate, isOverdue, getUrgency } from '../../utils/dateUtils'
@@ -11,13 +12,15 @@ const statusConfig = {
 }
 
 const AssignmentCard = ({ assignment, compact = false, onStatusChange }) => {
-  const { id, title, className, subject, dueDate, status, type } = assignment
-  const overdue = isOverdue(dueDate) && status !== 'completed'
+  const { id, title, className, subject, dueDate, type } = assignment
+  const [currentStatus, setCurrentStatus] = useState(assignment.status)
+  const overdue = isOverdue(dueDate) && currentStatus !== 'completed'
   const urgency = getUrgency(dueDate)
 
   const handleStatusChange = (newStatus) => {
     try {
       updateAssignment(id, { status: newStatus })
+      setCurrentStatus(newStatus) // Update local state immediately
       toast.success(`Status updated to ${statusConfig[newStatus].label}`)
       // Notify parent component if callback is provided
       if (onStatusChange) {
@@ -77,11 +80,11 @@ const AssignmentCard = ({ assignment, compact = false, onStatusChange }) => {
               {formatDueDate(dueDate)}
             </p>
             <Badge 
-              variant={overdue ? 'danger' : statusConfig[status]?.variant || 'default'} 
+              variant={overdue ? 'danger' : statusConfig[currentStatus]?.variant || 'default'} 
               size="small"
               className="mt-1"
             >
-              {overdue && status !== 'completed' ? 'Overdue' : statusConfig[status]?.label}
+              {overdue && currentStatus !== 'completed' ? 'Overdue' : statusConfig[currentStatus]?.label}
             </Badge>
           </div>
         </div>
@@ -100,7 +103,7 @@ const AssignmentCard = ({ assignment, compact = false, onStatusChange }) => {
               }}
               className={`
                 w-6 h-6 rounded-full border-2 transition-all
-                ${status === s 
+                ${currentStatus === s 
                   ? s === 'not-started' ? 'bg-gray-400 border-gray-400' :
                     s === 'in-progress' ? 'bg-amber-400 border-amber-400' :
                     'bg-green-500 border-green-500'
@@ -109,7 +112,7 @@ const AssignmentCard = ({ assignment, compact = false, onStatusChange }) => {
               `}
               title={statusConfig[s].label}
             >
-              {status === s && (
+              {currentStatus === s && (
                 <span className="flex items-center justify-center text-white text-xs">✓</span>
               )}
             </button>
